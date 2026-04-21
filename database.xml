@@ -1,0 +1,566 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<arabic_learning>
+    <settings>
+        <title>Belajar Huruf Arab</title>
+        <subtitle>Dari Nol Sampai Bisa Membaca</subtitle>
+    </settings>
+
+    <levels>
+        <level id="1" name="Huruf Hijaiyah" description="Mengenal 28 huruf Arab dasar" locked="false">
+            <materi>
+                <item id="1" arab="ا" latin="Alif" sound="a" type="huruf">
+                    <desc>Huruf mati (tidak berharakat) dibaca seperti a pada kata 'adil'</desc>
+                    <contoh>
+                        <kata arab="اَ" latin="Ba" arti="huruf A dengan fathah"/>
+                    </contoh>
+                </item>
+                <item id="2" arab="ب" latin="Ba" sound="b" type="huruf">
+                    <desc>Dibaca seperti huruf B pada kata 'buku'</desc>
+                    <contoh>
+                        <kata arab="بَ" latin="Ba" arti="huruf B dengan fathah"/>
+                    </contoh>
+                </item>
+                <item id="3" arab="ت" latin="Ta" sound="t" type="huruf">
+                    <desc>Dibaca seperti huruf T pada kata 'tali', lidah menyentuh gigi seri atas</desc>
+                    <contoh>
+                        <kata arab="تَ" latin="Ta" arti="huruf T dengan fathah"/>
+                    </contoh>
+                </item>
+                <item id="4" arab="ث" latin="Tsa" sound="ts" type="huruf">
+                    <desc>Dibaca seperti huruf S pada kata 'sabar', lidah di antara gigi</desc>
+                    <contoh>
+                        <kata arab="ثَ" latin="Tsa" arti="huruf Tsa dengan fathah"/>
+                    </contoh>
+                </item>
+                <item id="5" arab="ج" latin="Jim" sound="j" type="huruf">
+                    <desc>Dibaca seperti huruf J pada kata 'jalan', tenggorokan sedikit ditekan</desc>
+                    <contoh>
+                        <kata arab="جَ" latin="Ja" arti="huruf Jim dengan fathah"/>
+                    </contoh>
+                </item>
+                <item id="6" arab="ح" latin="Ha" sound="h" type="huruf">
+                    <desc>Dibaca dengan hembusan dari tenggorokan, lebih kasar dari huruf H biasa</desc>
+                    <contoh>
+                        <kata arab="حَ" latin="Ha" arti="huruf Ha dengan fathah"/>
+                    </contoh>
+                </item>
+                <item id="7" arab="خ" latin="Kha" sound="kh" type="huruf">
+                    <desc>Dibaca seperti suara mengorok dari tenggorokan bagian belakang</desc>
+                    <contoh>
+                        <kata arab="خَ" latin="Kha" arti="huruf Kha dengan fathah"/>
+                    </contoh>
+                </item>
+                <item id="8" arab="د" latin="Dal" sound="d" type="huruf">
+                    <desc>Dibaca seperti huruf D pada kata 'dagu', lidah menyentuh gigi</desc>
+                    <contoh>
+                        <kata arab="دَ" latin="Da" arti="huruf Dal dengan fathah"/>
+                    </contoh>
+                </item>
+                <item id="9" arab="ذ" latin="Dzal" sound="dz" type="huruf">
+                    <desc>Dibaca seperti huruf Z pada kata 'zaman', lidah di antara gigi</desc>
+                    <contoh>
+                        <kata arab="ذَ" latin="Dza" arti="huruf Dzal dengan fathah"/>
+                    </contoh>
+                </item>
+                <item id="10" arab="ر" latin="Ra" sound="r" type="huruf">
+                    <desc>Dibaca dengan getaran lidah (rolled R), seperti bahasa Spanyol</desc>
+                    <contoh>
+                        <kata arab="رَ" latin="Ra" arti="huruf Ra dengan fathah"/>
+                    </contoh>
+                </item>
+                <item id="11" arab="ز" latin="Zay" sound="z" type="huruf">
+                    <desc>Dibaca seperti huruf Z pada kata 'zebra'</desc>
+                    <contoh>
+                        <kata arab="زَ" latin="Za" arti="huruf Zay dengan fathah"/>
+                    </contoh>
+                </item>
+                <item id="12" arab="س" latin="Sin" sound="s" type="huruf">
+                    <desc>Dibaca seperti huruf S pada kata 'sapi', lidah di bawah gigi</desc>
+                    <contoh>
+                        <kata arab="سَ" latin="Sa" arti="huruf Sin dengan fathah"/>
+                    </contoh>
+                </item>
+                <item id="13" arab="ش" latin="Syin" sound="sy" type="huruf">
+                    <desc>Dibaca seperti SY pada kata 'Syahrini', tengah lidah ke langit-langit</desc>
+                    <contoh>
+                        <kata arab="شَ" latin="Sya" arti="huruf Syin dengan fathah"/>
+                    </contoh>
+                </item>
+                <item id="14" arab="ص" latin="Shad" sound="sh" type="huruf">
+                    <desc>Dibaca seperti S yang tebal, lidah lebih ditekankan ke belakang</desc>
+                    <contoh>
+                        <kata arab="صَ" latin="Sha" arti="huruf Shad dengan fathah"/>
+                    </contoh>
+                </item>
+                <item id="15" arab="ض" latin="Dhad" sound="dh" type="huruf">
+                    <desc>Dibaca seperti D yang tebal, sisi lidah menempel gigi geraham</desc>
+                    <contoh>
+                        <kata arab="ضَ" latin="Dha" arti="huruf Dhad dengan fathah"/>
+                    </contoh>
+                </item>
+                <item id="16" arab="ط" latin="Tha" sound="th" type="huruf">
+                    <desc>Dibaca seperti T yang tebal, lidah menyentuh gigi dengan tekanan</desc>
+                    <contoh>
+                        <kata arab="طَ" latin="Tha" arti="huruf Tha dengan fathah"/>
+                    </contoh>
+                </item>
+                <item id="17" arab="ظ" latin="Zha" sound="zh" type="huruf">
+                    <desc>Dibaca seperti Z yang tebal, lidah di antara gigi dengan tekanan</desc>
+                    <contoh>
+                        <kata arab="ظَ" latin="Zha" arti="huruf Zha dengan fathah"/>
+                    </contoh>
+                </item>
+                <item id="18" arab="ع" latin="Ain" sound="'" type="huruf">
+                    <desc>Dibaca dengan menahan suara di tenggorokan bagian tengah, seperti batuk halus</desc>
+                    <contoh>
+                        <kata arab="عَ" latin="'a" arti="huruf Ain dengan fathah"/>
+                    </contoh>
+                </item>
+                <item id="19" arab="غ" latin="Ghain" sound="gh" type="huruf">
+                    <desc>Dibaca seperti gargling (berkumur), getaran tenggorokan bagian belakang</desc>
+                    <contoh>
+                        <kata arab="غَ" latin="Gha" arti="huruf Ghain dengan fathah"/>
+                    </contoh>
+                </item>
+                <item id="20" arab="ف" latin="Fa" sound="f" type="huruf">
+                    <desc>Dibaca seperti huruf F pada kata 'foto', bibir bawah menyentuh gigi atas</desc>
+                    <contoh>
+                        <kata arab="فَ" latin="Fa" arti="huruf Fa dengan fathah"/>
+                    </contoh>
+                </item>
+                <item id="21" arab="ق" latin="Qaf" sound="q" type="huruf">
+                    <desc>Dibaca seperti K yang dalam dari tenggorokan bagian belakang</desc>
+                    <contoh>
+                        <kata arab="قَ" latin="Qa" arti="huruf Qaf dengan fathah"/>
+                    </contoh>
+                </item>
+                <item id="22" arab="ك" latin="Kaf" sound="k" type="huruf">
+                    <desc>Dibaca seperti huruf K pada kata 'kaki', dari bagian tengah tenggorokan</desc>
+                    <contoh>
+                        <kata arab="كَ" latin="Ka" arti="huruf Kaf dengan fathah"/>
+                    </contoh>
+                </item>
+                <item id="23" arab="ل" latin="Lam" sound="l" type="huruf">
+                    <desc>Dibaca seperti huruf L pada kata 'lampu', ujung lidah menyentuh gigi seri atas</desc>
+                    <contoh>
+                        <kata arab="لَ" latin="La" arti="huruf Lam dengan fathah"/>
+                    </contoh>
+                </item>
+                <item id="24" arab="م" latin="Mim" sound="m" type="huruf">
+                    <desc>Dibaca seperti huruf M pada kata 'makan', bibir rapat lalu dibuka</desc>
+                    <contoh>
+                        <kata arab="مَ" latin="Ma" arti="huruf Mim dengan fathah"/>
+                    </contoh>
+                </item>
+                <item id="25" arab="ن" latin="Nun" sound="n" type="huruf">
+                    <desc>Dibaca seperti huruf N pada kata 'nasi', ujung lidah di gigi seri atas</desc>
+                    <contoh>
+                        <kata arab="نَ" latin="Na" arti="huruf Nun dengan fathah"/>
+                    </contoh>
+                </item>
+                <item id="26" arab="و" latin="Waw" sound="w" type="huruf">
+                    <desc>Dibaca seperti huruf W pada kata 'waktu', bibir bundar ke depan</desc>
+                    <contoh>
+                        <kata arab="وَ" latin="Wa" arti="huruf Waw dengan fathah"/>
+                    </contoh>
+                </item>
+                <item id="27" arab="ه" latin="Ha" sound="h" type="huruf">
+                    <desc>Dibaca seperti huruf H pada kata 'hari', lembut dari tenggorokan</desc>
+                    <contoh>
+                        <kata arab="هَ" latin="Ha" arti="huruf Ha dengan fathah"/>
+                    </contoh>
+                </item>
+                <item id="28" arab="ي" latin="Ya" sound="y" type="huruf">
+                    <desc>Dibaca seperti huruf Y pada kata 'yakin', tengah lidah ke langit-langit</desc>
+                    <contoh>
+                        <kata arab="يَ" latin="Ya" arti="huruf Ya dengan fathah"/>
+                    </contoh>
+                </item>
+            </materi>
+            <drills>
+                <drill id="1" type="match">
+                    <question>Pasangkan huruf Arab dengan latinnya!</question>
+                    <pairs>
+                        <pair arab="ا" latin="Alif"/>
+                        <pair arab="ب" latin="Ba"/>
+                        <pair arab="ت" latin="Ta"/>
+                        <pair arab="ث" latin="Tsa"/>
+                        <pair arab="ج" latin="Jim"/>
+                    </pairs>
+                </drill>
+                <drill id="2" type="identify">
+                    <question>Huruf apakah ini?</question>
+                    <item arab="ج" answer="Jim"/>
+                    <item arab="د" answer="Dal"/>
+                    <item arab="ر" answer="Ra"/>
+                    <item arab="س" answer="Sin"/>
+                    <item arab="ش" answer="Syin"/>
+                </drill>
+            </drills>
+            <quiz>
+                <soal id="1" type="pilihan">
+                    <pertanyaan>Huruf apa ini: ب ?</pertanyaan>
+                    <jawaban benar="Ba">
+                        <pilihan>Alif</pilihan>
+                        <pilihan>Ba</pilihan>
+                        <pilihan>Ta</pilihan>
+                        <pilihan>Jim</pilihan>
+                    </jawaban>
+                </soal>
+                <soal id="2" type="pilihan">
+                    <pertanyaan>Huruf apa ini: ث ?</pertanyaan>
+                    <jawaban benar="Tsa">
+                        <pilihan>Ta</pilihan>
+                        <pilihan>Tsa</pilihan>
+                        <pilihan>Jim</pilihan>
+                        <pilihan>Ha</pilihan>
+                    </jawaban>
+                </soal>
+                <soal id="3" type="pilihan">
+                    <pertanyaan>Huruf apa ini: ح ?</pertanyaan>
+                    <jawaban benar="Ha">
+                        <pilihan>Kha</pilihan>
+                        <pilihan>Jim</pilihan>
+                        <pilihan>Ha</pilihan>
+                        <pilihan>Dal</pilihan>
+                    </jawaban>
+                </soal>
+                <soal id="4" type="pilihan">
+                    <pertanyaan>Huruf apa ini: خ ?</pertanyaan>
+                    <jawaban benar="Kha">
+                        <pilihan>Ha</pilihan>
+                        <pilihan>Kha</pilihan>
+                        <pilihan>Dal</pilihan>
+                        <pilihan>Dzal</pilihan>
+                    </jawaban>
+                </soal>
+                <soal id="5" type="pilihan">
+                    <pertanyaan>Huruf apa ini: ذ ?</pertanyaan>
+                    <jawaban benar="Dzal">
+                        <pilihan>Dal</pilihan>
+                        <pilihan>Dzal</pilihan>
+                        <pilihan>Ra</pilihan>
+                        <pilihan>Zay</pilihan>
+                    </jawaban>
+                </soal>
+            </quiz>
+        </level>
+
+        <level id="2" name="Harakat (Vokal)" description="Fathah, Kasrah, Dammah" locked="true">
+            <materi>
+                <item id="1" arab="َ" latin="Fathah" sound="a" type="harakat">
+                    <desc>Tanda di atas huruf, dibaca a (seperti pada kata 'adil')</desc>
+                    <contoh>
+                        <kata arab="بَ" latin="Ba" arti="baca: ba"/>
+                        <kata arab="تَ" latin="Ta" arti="baca: ta"/>
+                        <kata arab="مَ" latin="Ma" arti="baca: ma"/>
+                    </contoh>
+                </item>
+                <item id="2" arab="ِ" latin="Kasrah" sound="i" type="harakat">
+                    <desc>Tanda di bawah huruf, dibaca i (seperti pada kata 'iblis')</desc>
+                    <contoh>
+                        <kata arab="بِ" latin="Bi" arti="baca: bi"/>
+                        <kata arab="تِ" latin="Ti" arti="baca: ti"/>
+                        <kata arab="مِ" latin="Mi" arti="baca: mi"/>
+                    </contoh>
+                </item>
+                <item id="3" arab="ُ" latin="Dammah" sound="u" type="harakat">
+                    <desc>Tanda di atas huruf seperti waw kecil, dibaca u (seperti pada kata 'ulum')</desc>
+                    <contoh>
+                        <kata arab="بُ" latin="Bu" arti="baca: bu"/>
+                        <kata arab="تُ" latin="Tu" arti="baca: tu"/>
+                        <kata arab="مُ" latin="Mu" arti="baca: mu"/>
+                    </contoh>
+                </item>
+                <item id="4" arab="ًا" latin="Tanwin Fathah" sound="an" type="harakat">
+                    <desc>Fathah ganda + alif, dibaca an (seperti pada kata 'qolalan')</desc>
+                    <contoh>
+                        <kata arab="كِتَابًا" latin="Kitaban" arti="sebuah kitab"/>
+                    </contoh>
+                </item>
+                <item id="5" arab="ٍ" latin="Tanwin Kasrah" sound="in" type="harakat">
+                    <desc>Kasrah ganda, dibaca in (seperti pada kata 'muslimin')</desc>
+                    <contoh>
+                        <kata arab="مُسْلِمٍ" latin="Muslimin" arti="seorang muslim (kasus khafad)"/>
+                    </contoh>
+                </item>
+                <item id="6" arab="ٌ" latin="Tanwin Dammah" sound="un" type="harakat">
+                    <desc>Dammah ganda, dibaca un (seperti pada kata 'muslimun')</desc>
+                    <contoh>
+                        <kata arab="مُسْلِمٌ" latin="Muslimun" arti="seorang muslim (kasus rafa')"/>
+                    </contoh>
+                </item>
+            </materi>
+            <drills>
+                <drill id="1" type="identify_harakat">
+                    <question>Harakat apakah ini?</question>
+                    <item arab="َ" answer="Fathah"/>
+                    <item arab="ِ" answer="Kasrah"/>
+                    <item arab="ُ" answer="Dammah"/>
+                </drill>
+                <drill id="2" type="baca">
+                    <question>Bacalah huruf berikut!</question>
+                    <item arab="بَ" jawaban="ba"/>
+                    <item arab="بِ" jawaban="bi"/>
+                    <item arab="بُ" jawaban="bu"/>
+                    <item arab="تَ" jawaban="ta"/>
+                    <item arab="تِ" jawaban="ti"/>
+                    <item arab="تُ" jawaban="tu"/>
+                </drill>
+            </drills>
+            <quiz>
+                <soal id="1" type="pilihan">
+                    <pertanyaan>Bagaimana cara membaca: بَ ?</pertanyaan>
+                    <jawaban benar="ba">
+                        <pilihan>bi</pilihan>
+                        <pilihan>bu</pilihan>
+                        <pilihan>ba</pilihan>
+                        <pilihan>be</pilihan>
+                    </jawaban>
+                </soal>
+                <soal id="2" type="pilihan">
+                    <pertanyaan>Bagaimana cara membaca: مُ ?</pertanyaan>
+                    <jawaban benar="mu">
+                        <pilihan>ma</pilihan>
+                        <pilihan>mi</pilihan>
+                        <pilihan>mu</pilihan>
+                        <pilihan>mo</pilihan>
+                    </jawaban>
+                </soal>
+                <soal id="3" type="pilihan">
+                    <pertanyaan>Tanda ِ dibaca?</pertanyaan>
+                    <jawaban benar="i">
+                        <pilihan>a</pilihan>
+                        <pilihan>i</pilihan>
+                        <pilihan>u</pilihan>
+                        <pilihan>e</pilihan>
+                    </jawaban>
+                </soal>
+                <soal id="4" type="pilihan">
+                    <pertanyaan>Bagaimana cara membaca: نًا ?</pertanyaan>
+                    <jawaban benar="nan">
+                        <pilihan>na</pilihan>
+                        <pilihan>ni</pilihan>
+                        <pilihan>nu</pilihan>
+                        <pilihan>nan</pilihan>
+                    </jawaban>
+                </soal>
+                <soal id="5" type="pilihan">
+                    <pertanyaan>Manakah yang dibaca "bu"?</pertanyaan>
+                    <jawaban benar="بُ">
+                        <pilihan>بَ</pilihan>
+                        <pilihan>بِ</pilihan>
+                        <pilihan>بُ</pilihan>
+                        <pilihan>بًا</pilihan>
+                    </jawaban>
+                </soal>
+            </quiz>
+        </level>
+
+        <level id="3" name="Sukun &amp; Tasydid" description="Huruf mati dan huruf ganda" locked="true">
+            <materi>
+                <item id="1" arab="ْ" latin="Sukun" sound="" type="tanda">
+                    <desc>Tanda bulat di atas huruf, menandakan huruf tidak bervokal (mati)</desc>
+                    <contoh>
+                        <kata arab="بْ" latin="B" arti="huruf B tanpa vokal, dibaca 'b' pendek"/>
+                        <kata arab="كْتَبَ" latin="Kataba" arti="dia menulis"/>
+                    </contoh>
+                </item>
+                <item id="2" arab="ّ" latin="Tasydid" sound="" type="tanda">
+                    <desc>Tanda seperti huruf W kecil di atas huruf, menandakan huruf digandakan</desc>
+                    <contoh>
+                        <kata arab="رَّ" latin="Rra" arti="huruf Ra digandakan"/>
+                        <kata arab="مُدَّ" latin="Mudda" arti="dilanjutkan"/>
+                    </contoh>
+                </item>
+                <item id="3" arab="ٓ" latin="Maddah" sound="" type="tanda">
+                    <desc>Tanda panjang di atas alif, memanjangkan bacaan alif menjadi aa</desc>
+                    <contoh>
+                        <kata arab="قَالَ" latin="Qaala" arti="dia berkata (dibaca qaa-la)"/>
+                    </contoh>
+                </item>
+            </materi>
+            <drills>
+                <drill id="1" type="baca">
+                    <question>Bacalah kata berikut dengan sukun!</question>
+                    <item arab="كْتَبَ" jawaban="kataba"/>
+                    <item arab="دَرْسٌ" jawaban="darsun"/>
+                    <item arab="قَلْبٌ" jawaban="qalbun"/>
+                </drill>
+                <drill id="2" type="baca">
+                    <question>Bacalah kata berikut dengan tasydid!</question>
+                    <item arab="مُدَّ" jawaban="mudda"/>
+                    <item arab="رَّبَّ" jawaban="rabba"/>
+                    <item arab="كَتَّبَ" jawaban="kattaba"/>
+                </drill>
+            </drills>
+            <quiz>
+                <soal id="1" type="pilihan">
+                    <pertanyaan>Bagaimana membaca: كْتَبَ ?</pertanyaan>
+                    <jawaban benar="kataba">
+                        <pilihan>kataba</pilihan>
+                        <pilihan>katba</pilihan>
+                        <pilihan>kutiba</pilihan>
+                        <pilihan>kattaba</pilihan>
+                    </jawaban>
+                </soal>
+                <soal id="2" type="pilihan">
+                    <pertanyaan>Tanda ّ artinya?</pertanyaan>
+                    <jawaban benar="Tasydid">
+                        <pilihan>Sukun</pilihan>
+                        <pilihan>Tasydid</pilihan>
+                        <pilihan>Maddah</pilihan>
+                        <pilihan>Fathah</pilihan>
+                    </jawaban>
+                </soal>
+                <soal id="3" type="pilihan">
+                    <pertanyaan>Bagaimana membaca: قَالَ ?</pertanyaan>
+                    <jawaban benar="qaala">
+                        <pilihan>qala</pilihan>
+                        <pilihan>qaala</pilihan>
+                        <pilihan>qila</pilihan>
+                        <pilihan>qula</pilihan>
+                    </jawaban>
+                </soal>
+            </quiz>
+        </level>
+
+        <level id="4" name="Kata Sederhana" description="Membaca kata-kata dasar" locked="true">
+            <materi>
+                <item id="1" arab="كِتَابٌ" latin="Kitabun" sound="kitabun" type="kata">
+                    <desc>Kata benda yang artinya "buku"</desc>
+                    <baca>
+                        <huruf h="ka" v="i"/>
+                        <huruf h="ta" v="a"/>
+                        <huruf h="ba" v="un"/>
+                    </baca>
+                </item>
+                <item id="2" arab="قَلَمٌ" latin="Qalamun" sound="qalamun" type="kata">
+                    <desc>Kata benda yang artinya "pulpen"</desc>
+                    <baca>
+                        <huruf h="qa" v="a"/>
+                        <huruf h="la" v="a"/>
+                        <huruf h="ma" v="un"/>
+                    </baca>
+                </item>
+                <item id="3" arab="بَيْتٌ" latin="Baytun" sound="baytun" type="kata">
+                    <desc>Kata benda yang artinya "rumah"</desc>
+                    <baca>
+                        <huruf h="ba" v="a"/>
+                        <huruf h="ya" v="_"/>
+                        <huruf h="ta" v="un"/>
+                    </baca>
+                </item>
+                <item id="4" arab="بَابٌ" latin="Babun" sound="babun" type="kata">
+                    <desc>Kata benda yang artinya "pintu"</desc>
+                    <baca>
+                        <huruf h="ba" v="a"/>
+                        <huruf h="ba" v="un"/>
+                    </baca>
+                </item>
+                <item id="5" arab="مَدْرَسَةٌ" latin="Madrasatun" sound="madrasatun" type="kata">
+                    <desc>Kata benda yang artinya "sekolah"</desc>
+                    <baca>
+                        <huruf h="ma" v="a"/>
+                        <huruf h="da" v="_"/>
+                        <huruf h="ra" v="a"/>
+                        <huruf h="sa" v="a"/>
+                        <huruf h="ta" v="un"/>
+                    </baca>
+                </item>
+                <item id="6" arab="مُسْلِمٌ" latin="Muslimun" sound="muslimun" type="kata">
+                    <desc>Kata benda yang artinya "orang Islam"</desc>
+                    <baca>
+                        <huruf h="mu" v="u"/>
+                        <huruf h="sli" v="_"/>
+                        <huruf h="mu" v="un"/>
+                    </baca>
+                </item>
+                <item id="7" arab="صَلاَةٌ" latin="Shalaatun" sound="shalaatun" type="kata">
+                    <desc>Kata benda yang artinya "sholat"</desc>
+                    <baca>
+                        <huruf h="sha" v="a"/>
+                        <huruf h="laa" v="a"/>
+                        <huruf h="tu" v="un"/>
+                    </baca>
+                </item>
+                <item id="8" arab="مَاءٌ" latin="Maun" sound="maun" type="kata">
+                    <desc>Kata benda yang artinya "air"</desc>
+                    <baca>
+                        <huruf h="maa" v="a"/>
+                        <huruf h="u" v="un"/>
+                    </baca>
+                </item>
+            </materi>
+            <drills>
+                <drill id="1" type="baca_kata">
+                    <question>Bacalah kata berikut!</question>
+                    <item arab="كِتَابٌ" jawaban="kitabun"/>
+                    <item arab="قَلَمٌ" jawaban="qalamun"/>
+                    <item arab="بَيْتٌ" jawaban="baytun"/>
+                    <item arab="بَابٌ" jawaban="babun"/>
+                </drill>
+            </drills>
+            <quiz>
+                <soal id="1" type="pilihan">
+                    <pertanyaan>Bagaimana membaca: كِتَابٌ ?</pertanyaan>
+                    <jawaban benar="kitabun">
+                        <pilihan>kutubun</pilihan>
+                        <pilihan>kitabun</pilihan>
+                        <pilihan>kataba</pilihan>
+                        <pilihan>katibun</pilihan>
+                    </jawaban>
+                </soal>
+                <soal id="2" type="pilihan">
+                    <pertanyaan>Bagaimana membaca: بَيْتٌ ?</pertanyaan>
+                    <jawaban benar="baytun">
+                        <pilihan>baytun</pilihan>
+                        <pilihan>baitun</pilihan>
+                        <pilihan>byatun</pilihan>
+                        <pilihan>baytan</pilihan>
+                    </jawaban>
+                </soal>
+                <soal id="3" type="pilihan">
+                    <pertanyaan>Arti dari مَدْرَسَةٌ adalah?</pertanyaan>
+                    <jawaban benar="sekolah">
+                        <pilihan>masjid</pilihan>
+                        <pilihan>rumah</pilihan>
+                        <pilihan>sekolah</pilihan>
+                        <pilihan>meja</pilihan>
+                    </jawaban>
+                </soal>
+                <soal id="4" type="pilihan">
+                    <pertanyaan>Manakah yang artinya "air"?</pertanyaan>
+                    <jawaban benar="مَاءٌ">
+                        <pilihan>قَلَمٌ</pilihan>
+                        <pilihan>مَاءٌ</pilihan>
+                        <pilihan>بَابٌ</pilihan>
+                        <pilihan>كِتَابٌ</pilihan>
+                    </jawaban>
+                </soal>
+                <soal id="5" type="pilihan">
+                    <pertanyaan>Bagaimana membaca: صَلاَةٌ ?</pertanyaan>
+                    <jawaban benar="shalaatun">
+                        <pilihan>shalatun</pilihan>
+                        <pilihan>shalaatun</pilihan>
+                        <pilihan>shilatun</pilihan>
+                        <pilihan>shulatun</pilihan>
+                    </jawaban>
+                </soal>
+            </quiz>
+        </level>
+    </levels>
+
+    <progress>
+        <user id="default">
+            <level1_score>0</level1_score>
+            <level2_score>0</level2_score>
+            <level3_score>0</level3_score>
+            <level4_score>0</level4_score>
+            <level1_unlocked>true</level1_unlocked>
+            <level2_unlocked>false</level2_unlocked>
+            <level3_unlocked>false</level3_unlocked>
+            <level4_unlocked>false</level4_unlocked>
+        </user>
+    </progress>
+</arabic_learning>

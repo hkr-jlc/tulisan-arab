@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Belajar Huruf Arab - Dari Nol Sampai Bisa</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+</head>
+<body>
+    <!-- Header -->
+    <header class="app-header">
+        <div>
+            <h1><span class="icon">🕌</span> Belajar Huruf Arab</h1>
+            <div class="subtitle">Dari Nol Sampai Bisa Membaca</div>
+        </div>
+        <div class="header-stats">
+            <div class="stat-badge" id="level-badge">Level 1</div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Level Selector -->
+        <section class="levels-section">
+            <div class="section-title">📚 Pilih Level</div>
+            <div class="levels-grid" id="levels-grid">
+                <!-- Levels rendered by JS -->
+            </div>
+        </section>
+
+        <!-- Navigation Tabs -->
+        <nav class="nav-tabs">
+            <button class="nav-tab active" data-tab="materi">📖 Materi</button>
+            <button class="nav-tab" data-tab="drill">🎯 Drill</button>
+            <button class="nav-tab" data-tab="quiz">🏆 Kuis</button>
+        </nav>
+
+        <!-- Content Area -->
+        <main class="content-area" id="content-area">
+            <!-- Content rendered by JS -->
+        </main>
+    </div>
+
+    <!-- Detail Modal Overlay -->
+    <div class="detail-overlay" id="detail-overlay">
+        <div class="detail-modal" id="detail-modal">
+            <!-- Modal content rendered by JS -->
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
