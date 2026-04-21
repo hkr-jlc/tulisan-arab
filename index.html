@@ -7,16 +7,42 @@
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<base target="_blank">
 </head>
 <body>
+    <!-- Auth Overlay -->
+    <div class="auth-overlay" id="auth-overlay">
+        <div class="auth-box" id="auth-box">
+            <!-- Auth form rendered by JS -->
+        </div>
+    </div>
+
     <!-- Header -->
     <header class="app-header">
         <div>
             <h1><span class="icon">🕌</span> Belajar Huruf Arab</h1>
             <div class="subtitle">Dari Nol Sampai Bisa Membaca</div>
         </div>
-        <div class="header-stats">
-            <div class="stat-badge" id="level-badge">Level 1</div>
+        <div style="display:flex;align-items:center;gap:1rem">
+            <div class="header-stats">
+                <div class="stat-badge" id="level-badge">Guest</div>
+            </div>
+            <div class="user-profile" id="user-profile" style="display:none" onclick="toggleDropdown()">
+                <div class="user-avatar" id="user-avatar">?</div>
+                <div class="user-info">
+                    <div class="user-name" id="user-name">User</div>
+                    <div class="user-email" id="user-email">email</div>
+                </div>
+                <div class="user-dropdown" id="user-dropdown">
+                    <div class="user-dropdown-item" onclick="event.stopPropagation();switchAccount()">👥 Ganti Akun</div>
+                    <div class="user-dropdown-item" onclick="event.stopPropagation();showLeaderboard()">🏆 Ranking</div>
+                    <div class="user-dropdown-divider"></div>
+                    <div class="user-dropdown-item" onclick="event.stopPropagation();exportData()">💾 Export Data</div>
+                    <div class="user-dropdown-item" onclick="event.stopPropagation();importData()">📁 Import Data</div>
+                    <div class="user-dropdown-divider"></div>
+                    <div class="user-dropdown-item" onclick="event.stopPropagation();logout()" style="color:var(--danger)">🚪 Keluar</div>
+                </div>
+            </div>
         </div>
     </header>
 
