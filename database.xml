@@ -5,6 +5,31 @@
         <subtitle>Dari Nol Sampai Bisa Membaca</subtitle>
     </settings>
 
+    <users>
+        <user id="demo">
+            <email>demo@arab.com</email>
+            <username>DemoUser</username>
+            <password>demo123</password>
+            <created>2026-04-21</created>
+            <scores>
+                <level id="1" best_score="80" best_time="45" attempts="3"/>
+                <level id="2" best_score="0" best_time="0" attempts="0"/>
+                <level id="3" best_score="0" best_time="0" attempts="0"/>
+                <level id="4" best_score="0" best_time="0" attempts="0"/>
+            </scores>
+        </user>
+    </users>
+
+    <leaderboard>
+        <entry rank="1">
+            <username>DemoUser</username>
+            <total_score>80</total_score>
+            <avg_time>45</avg_time>
+            <levels_completed>1</levels_completed>
+            <last_active>2026-04-21</last_active>
+        </entry>
+    </leaderboard>
+
     <levels>
         <level id="1" name="Huruf Hijaiyah" description="Mengenal 28 huruf Arab dasar" locked="false">
             <materi>
@@ -550,17 +575,4 @@
             </quiz>
         </level>
     </levels>
-
-    <progress>
-        <user id="default">
-            <level1_score>0</level1_score>
-            <level2_score>0</level2_score>
-            <level3_score>0</level3_score>
-            <level4_score>0</level4_score>
-            <level1_unlocked>true</level1_unlocked>
-            <level2_unlocked>false</level2_unlocked>
-            <level3_unlocked>false</level3_unlocked>
-            <level4_unlocked>false</level4_unlocked>
-        </user>
-    </progress>
 </arabic_learning>
