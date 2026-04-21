@@ -1,42 +1,376 @@
 // ===== STATE MANAGEMENT =====
 const AppState = {
+    currentUser: null,
     currentLevel: 1,
     currentTab: 'materi',
     levels: [],
-    progress: {
-        level1_score: 0,
-        level2_score: 0,
-        level3_score: 0,
-        level4_score: 0,
-        level1_unlocked: true,
-        level2_unlocked: false,
-        level3_unlocked: false,
-        level4_unlocked: false
-    },
+    users: [],
+    leaderboard: [],
     drillIndex: 0,
     quizIndex: 0,
     quizScore: 0,
     quizAnswers: [],
+    quizStartTime: null,
+    quizElapsed: 0,
+    quizTimerInterval: null,
     selectedMatch: null,
     matchPairs: [],
     matchedCount: 0
 };
 
-// ===== LOAD PROGRESS =====
-function loadProgress() {
-    const saved = localStorage.getItem('arabic_learning_progress');
+const STORAGE_KEYS = {
+    USERS: 'arabic_users',
+    LEADERBOARD: 'arabic_leaderboard',
+    CURRENT_USER: 'arabic_current_user'
+};
+
+// ===== LOCAL STORAGE UTILS =====
+function saveToStorage(key, data) {
+    localStorage.setItem(key, JSON.stringify(data));
+}
+
+function loadFromStorage(key, defaultVal) {
+    const saved = localStorage.getItem(key);
     if (saved) {
-        try {
-            const data = JSON.parse(saved);
-            AppState.progress = { ...AppState.progress, ...data };
-        } catch (e) {
-            console.log('Error loading progress:', e);
+        try { return JSON.parse(saved); } catch(e) { return defaultVal; }
+    }
+    return defaultVal;
+}
+
+// ===== USER MANAGEMENT =====
+function initUsers() {
+    const savedUsers = loadFromStorage(STORAGE_KEYS.USERS, []);
+    if (savedUsers.length === 0) {
+        // Add demo user if empty
+        const demoUser = {
+            id: 'demo_' + Date.now(),
+            email: 'demo@arab.com',
+            username: 'DemoUser',
+            password: 'demo123',
+            created: new Date().toISOString().split('T')[0],
+            scores: {
+                1: { best_score: 80, best_time: 45, attempts: 3 },
+                2: { best_score: 0, best_time: 0, attempts: 0 },
+                3: { best_score: 0, best_time: 0, attempts: 0 },
+                4: { best_score: 0, best_time: 0, attempts: 0 }
+            }
+        };
+        savedUsers.push(demoUser);
+        saveToStorage(STORAGE_KEYS.USERS, savedUsers);
+    }
+    AppState.users = savedUsers;
+}
+
+function getUserByEmail(email) {
+    return AppState.users.find(u => u.email.toLowerCase() === email.toLowerCase());
+}
+
+function getUserById(id) {
+    return AppState.users.find(u => u.id === id);
+}
+
+function createUser(email, username, password) {
+    const newUser = {
+        id: 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9),
+        email: email.toLowerCase().trim(),
+        username: username.trim(),
+        password: password,
+        created: new Date().toISOString().split('T')[0],
+        scores: {
+            1: { best_score: 0, best_time: 0, attempts: 0 },
+            2: { best_score: 0, best_time: 0, attempts: 0 },
+            3: { best_score: 0, best_time: 0, attempts: 0 },
+            4: { best_score: 0, best_time: 0, attempts: 0 }
         }
+    };
+    AppState.users.push(newUser);
+    saveToStorage(STORAGE_KEYS.USERS, AppState.users);
+    return newUser;
+}
+
+function updateUserScore(userId, levelId, score, timeSeconds) {
+    const user = getUserById(userId);
+    if (!user) return;
+
+    if (!user.scores[levelId]) {
+        user.scores[levelId] = { best_score: 0, best_time: 0, attempts: 0 };
+    }
+
+    const current = user.scores[levelId];
+    current.attempts++;
+
+    if (score > current.best_score) {
+        current.best_score = score;
+    }
+    if (timeSeconds > 0 && (current.best_time === 0 || timeSeconds < current.best_time)) {
+        current.best_time = timeSeconds;
+    }
+
+    saveToStorage(STORAGE_KEYS.USERS, AppState.users);
+    updateLeaderboard();
+}
+
+// ===== LEADERBOARD =====
+function initLeaderboard() {
+    const saved = loadFromStorage(STORAGE_KEYS.LEADERBOARD, []);
+    if (saved.length === 0 && AppState.users.length > 0) {
+        updateLeaderboard();
+    } else {
+        AppState.leaderboard = saved;
     }
 }
 
-function saveProgress() {
-    localStorage.setItem('arabic_learning_progress', JSON.stringify(AppState.progress));
+function updateLeaderboard() {
+    const entries = AppState.users.map(u => {
+        let totalScore = 0;
+        let totalTime = 0;
+        let levelsCompleted = 0;
+        let timeCount = 0;
+
+        Object.keys(u.scores).forEach(lid => {
+            const s = u.scores[lid];
+            totalScore += s.best_score;
+            if (s.best_score >= 60) levelsCompleted++;
+            if (s.best_time > 0) {
+                totalTime += s.best_time;
+                timeCount++;
+            }
+        });
+
+        return {
+            username: u.username,
+            userId: u.id,
+            total_score: totalScore,
+            avg_time: timeCount > 0 ? Math.round(totalTime / timeCount) : 0,
+            levels_completed: levelsCompleted,
+            last_active: new Date().toISOString().split('T')[0]
+        };
+    });
+
+    entries.sort((a, b) => b.total_score - a.total_score || a.avg_time - b.avg_time);
+    AppState.leaderboard = entries;
+    saveToStorage(STORAGE_KEYS.LEADERBOARD, entries);
+}
+
+// ===== AUTH UI =====
+function showAuth() {
+    const overlay = document.getElementById('auth-overlay');
+    overlay.classList.remove('hidden');
+    renderAuthForm('login');
+}
+
+function hideAuth() {
+    document.getElementById('auth-overlay').classList.add('hidden');
+}
+
+function renderAuthForm(mode) {
+    const box = document.getElementById('auth-box');
+    const isLogin = mode === 'login';
+
+    box.innerHTML = `
+        <div class="auth-logo">
+            <div class="icon">🕌</div>
+            <h2>Belajar Huruf Arab</h2>
+            <p>${isLogin ? 'Masuk untuk melanjutkan belajar' : 'Buat akun baru untuk memulai'}</p>
+        </div>
+        <div class="auth-tabs">
+            <button class="auth-tab ${isLogin ? 'active' : ''}" onclick="renderAuthForm('login')">Masuk</button>
+            <button class="auth-tab ${!isLogin ? 'active' : ''}" onclick="renderAuthForm('register')">Daftar</button>
+        </div>
+        <div class="auth-error" id="auth-error"></div>
+        <div class="auth-success" id="auth-success"></div>
+        <form class="auth-form" id="auth-form" onsubmit="handleAuth(event, '${mode}')">
+            ${!isLogin ? `
+                <div class="form-group">
+                    <label>Username</label>
+                    <input type="text" id="auth-username" placeholder="Nama panggilan" required minlength="3">
+                </div>
+            ` : ''}
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" id="auth-email" placeholder="email@contoh.com" required>
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" id="auth-password" placeholder="Minimal 6 karakter" required minlength="6">
+            </div>
+            <button type="submit" class="auth-btn">${isLogin ? '🔓 Masuk' : '✨ Daftar'}</button>
+        </form>
+        <div class="auth-footer">
+            ${isLogin ? 'Belum punya akun? Klik "Daftar" di atas' : 'Sudah punya akun? Klik "Masuk" di atas'}
+        </div>
+    `;
+}
+
+function handleAuth(e, mode) {
+    e.preventDefault();
+    const email = document.getElementById('auth-email').value.trim();
+    const password = document.getElementById('auth-password').value;
+    const errorEl = document.getElementById('auth-error');
+    const successEl = document.getElementById('auth-success');
+
+    errorEl.classList.remove('show');
+    successEl.classList.remove('show');
+
+    if (mode === 'register') {
+        const username = document.getElementById('auth-username').value.trim();
+
+        if (getUserByEmail(email)) {
+            errorEl.textContent = '❌ Email sudah terdaftar. Silakan masuk.';
+            errorEl.classList.add('show');
+            return;
+        }
+
+        if (username.length < 3) {
+            errorEl.textContent = '❌ Username minimal 3 karakter.';
+            errorEl.classList.add('show');
+            return;
+        }
+
+        const newUser = createUser(email, username, password);
+        successEl.textContent = '✅ Akun berhasil dibuat! Silakan masuk.';
+        successEl.classList.add('show');
+
+        setTimeout(() => renderAuthForm('login'), 1500);
+        return;
+    }
+
+    // Login
+    const user = getUserByEmail(email);
+    if (!user) {
+        errorEl.textContent = '❌ Email tidak ditemukan. Silakan daftar dulu.';
+        errorEl.classList.add('show');
+        return;
+    }
+
+    if (user.password !== password) {
+        errorEl.textContent = '❌ Password salah.';
+        errorEl.classList.add('show');
+        return;
+    }
+
+    loginUser(user);
+}
+
+function loginUser(user) {
+    AppState.currentUser = user;
+    saveToStorage(STORAGE_KEYS.CURRENT_USER, user.id);
+    hideAuth();
+    updateHeaderUser();
+    renderLevels();
+    showWelcome();
+}
+
+function logout() {
+    AppState.currentUser = null;
+    localStorage.removeItem(STORAGE_KEYS.CURRENT_USER);
+    updateHeaderUser();
+    showAuth();
+}
+
+function switchAccount() {
+    const dropdown = document.getElementById('user-dropdown');
+    dropdown.classList.remove('show');
+
+    const content = document.getElementById('content-area');
+    content.innerHTML = `
+        <div style="max-width:500px;margin:0 auto">
+            <h2 style="text-align:center;margin-bottom:1.5rem;color:var(--primary-dark)">👥 Pilih Akun</h2>
+            <div class="account-list" id="account-list"></div>
+            <div style="text-align:center;margin-top:1.5rem">
+                <button class="btn btn-secondary" onclick="showAuth()">➕ Tambah Akun Baru</button>
+            </div>
+        </div>
+    `;
+
+    const list = document.getElementById('account-list');
+    AppState.users.forEach(u => {
+        const isActive = AppState.currentUser && AppState.currentUser.id === u.id;
+        const item = document.createElement('div');
+        item.className = `account-item ${isActive ? 'active' : ''}`;
+        item.innerHTML = `
+            <div class="acc-avatar">${u.username.charAt(0).toUpperCase()}</div>
+            <div class="acc-info">
+                <div class="acc-name">${u.username}</div>
+                <div class="acc-email">${u.email}</div>
+            </div>
+            <div class="acc-check">✓</div>
+        `;
+        item.onclick = () => {
+            if (!isActive) {
+                loginUser(u);
+            }
+        };
+        list.appendChild(item);
+    });
+}
+
+function updateHeaderUser() {
+    const badge = document.getElementById('level-badge');
+    const profile = document.getElementById('user-profile');
+
+    if (AppState.currentUser) {
+        badge.textContent = `Level ${AppState.currentLevel}`;
+        profile.style.display = 'flex';
+        document.getElementById('user-name').textContent = AppState.currentUser.username;
+        document.getElementById('user-email').textContent = AppState.currentUser.email;
+        document.getElementById('user-avatar').textContent = AppState.currentUser.username.charAt(0).toUpperCase();
+    } else {
+        badge.textContent = 'Guest';
+        profile.style.display = 'none';
+    }
+}
+
+function toggleDropdown() {
+    const dropdown = document.getElementById('user-dropdown');
+    dropdown.classList.toggle('show');
+}
+
+// ===== EXPORT / IMPORT DATA =====
+function exportData() {
+    const data = {
+        users: AppState.users,
+        leaderboard: AppState.leaderboard,
+        exported_at: new Date().toISOString()
+    };
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `arabic-learning-backup-${new Date().toISOString().split('T')[0]}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+}
+
+function importData() {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.json';
+    input.onchange = (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+            try {
+                const data = JSON.parse(ev.target.result);
+                if (data.users) {
+                    AppState.users = data.users;
+                    saveToStorage(STORAGE_KEYS.USERS, data.users);
+                }
+                if (data.leaderboard) {
+                    AppState.leaderboard = data.leaderboard;
+                    saveToStorage(STORAGE_KEYS.LEADERBOARD, data.leaderboard);
+                }
+                alert('✅ Data berhasil diimport! Silakan refresh halaman.');
+                location.reload();
+            } catch (err) {
+                alert('❌ File tidak valid.');
+            }
+        };
+        reader.readAsText(file);
+    };
+    input.click();
 }
 
 // ===== PARSE XML =====
@@ -50,11 +384,24 @@ async function loadXML() {
         xmlDoc = parser.parseFromString(text, 'text/xml');
         parseLevels();
         renderLevels();
-        showWelcome();
+
+        // Check saved login
+        const savedUserId = loadFromStorage(STORAGE_KEYS.CURRENT_USER, null);
+        if (savedUserId) {
+            const user = getUserById(savedUserId);
+            if (user) {
+                AppState.currentUser = user;
+                updateHeaderUser();
+                hideAuth();
+                showWelcome();
+                return;
+            }
+        }
+        showAuth();
     } catch (err) {
         console.error('Error loading XML:', err);
         document.getElementById('content-area').innerHTML = 
-            '<div style="text-align:center;padding:2rem;color:#e74c3c">Gagal memuat database. Pastikan file database.xml ada di folder yang sama.</div>';
+            '<div style="text-align:center;padding:2rem;color:#e74c3c">Gagal memuat database.</div>';
     }
 }
 
@@ -123,10 +470,23 @@ function renderLevels() {
         { name: 'Kata Sederhana', desc: 'Membaca kata-kata dasar' }
     ];
 
+    const user = AppState.currentUser;
+
     AppState.levels.forEach((level, idx) => {
         const meta = levelMeta[idx] || { name: 'Level ' + level.id, desc: '' };
-        const isUnlocked = AppState.progress[`level${level.id}_unlocked`];
-        const score = AppState.progress[`level${level.id}_score`] || 0;
+        let isUnlocked = true;
+        let score = 0;
+
+        if (user && user.scores) {
+            const prevLevel = level.id - 1;
+            if (prevLevel > 0) {
+                const prev = user.scores[prevLevel];
+                isUnlocked = prev && prev.best_score >= 60;
+            }
+            const curr = user.scores[level.id];
+            score = curr ? curr.best_score : 0;
+        }
+
         const isActive = AppState.currentLevel === level.id;
 
         const card = document.createElement('div');
@@ -147,6 +507,7 @@ function renderLevels() {
             <div class="level-progress">
                 <div class="level-progress-bar" style="width: ${score}%"></div>
             </div>
+            ${score > 0 ? `<div style="font-size:0.75rem;color:var(--primary);margin-top:0.3rem;font-weight:600">⭐ Skor: ${score}%</div>` : ''}
         `;
 
         grid.appendChild(card);
@@ -176,10 +537,13 @@ function showTab(tab) {
 // ===== WELCOME SCREEN =====
 function showWelcome() {
     const content = document.getElementById('content-area');
+    const user = AppState.currentUser;
+    const username = user ? user.username : 'Pembelajar';
+
     content.innerHTML = `
         <div class="welcome-screen">
             <div class="big-icon">📖</div>
-            <h2>Selamat Datang!</h2>
+            <h2>Halo, ${username}! 👋</h2>
             <p>Belajar huruf Arab dari nol dengan materi interaktif, latihan drill, dan kuis seru. 
             Pilih level di atas untuk memulai perjalananmu!</p>
             <div class="features-list">
@@ -193,14 +557,73 @@ function showWelcome() {
                 </div>
                 <div class="feature-item">
                     <div class="icon">🏆</div>
-                    <div class="label">Kuis & Skor</div>
+                    <div class="label">Kuis & Ranking</div>
                 </div>
                 <div class="feature-item">
                     <div class="icon">🔊</div>
                     <div class="label">Audio Bacaan</div>
                 </div>
             </div>
-            <button class="btn btn-primary" onclick="showTab('materi')">Mulai Belajar</button>
+            <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap">
+                <button class="btn btn-primary" onclick="showTab('materi')">Mulai Belajar</button>
+                <button class="btn btn-secondary" onclick="showLeaderboard()">📊 Lihat Ranking</button>
+            </div>
+        </div>
+    `;
+}
+
+// ===== LEADERBOARD =====
+function showLeaderboard() {
+    updateLeaderboard();
+    const content = document.getElementById('content-area');
+    const user = AppState.currentUser;
+
+    let rows = AppState.leaderboard.map((entry, idx) => {
+        const isCurrent = user && entry.userId === user.id;
+        const rankClass = idx === 0 ? 'rank-1' : idx === 1 ? 'rank-2' : idx === 2 ? 'rank-3' : 'rank-other';
+        const medal = idx === 0 ? '🥇' : idx === 1 ? '🥈' : idx === 2 ? '🥉' : '';
+
+        return `
+            <tr class="${isCurrent ? 'current-user' : ''}">
+                <td><div class="rank-badge ${rankClass}">${medal || (idx + 1)}</div></td>
+                <td><strong>${entry.username}</strong> ${isCurrent ? '(Kamu)' : ''}</td>
+                <td><strong>${entry.total_score}%</strong></td>
+                <td>${entry.avg_time > 0 ? entry.avg_time + ' dtk' : '-'}</td>
+                <td>${entry.levels_completed}/4</td>
+            </tr>
+        `;
+    }).join('');
+
+    if (rows === '') {
+        rows = '<tr><td colspan="5" style="text-align:center;padding:2rem;color:var(--text-light)">Belum ada data. Ayo mulai kuis!</td></tr>';
+    }
+
+    content.innerHTML = `
+        <div class="leaderboard-section">
+            <div class="section-title">🏆 Peringkat Pembelajar</div>
+            <div class="leaderboard-card">
+                <div class="leaderboard-header">
+                    <h3>📊 Leaderboard</h3>
+                    <span style="font-size:0.85rem">${AppState.leaderboard.length} pembelajar</span>
+                </div>
+                <div style="overflow-x:auto">
+                    <table class="leaderboard-table">
+                        <thead>
+                            <tr>
+                                <th>Rank</th>
+                                <th>Nama</th>
+                                <th>Total Skor</th>
+                                <th>Rata-rata Waktu</th>
+                                <th>Level Selesai</th>
+                            </tr>
+                        </thead>
+                        <tbody>${rows}</tbody>
+                    </table>
+                </div>
+            </div>
+            <div style="text-align:center;margin-top:1.5rem">
+                <button class="btn btn-secondary" onclick="showWelcome()">⬅ Kembali</button>
+            </div>
         </div>
     `;
 }
@@ -290,7 +713,6 @@ function renderDrill() {
         return;
     }
 
-    // Reset drill state
     AppState.drillIndex = 0;
     AppState.selectedMatch = null;
     AppState.matchedCount = 0;
@@ -398,7 +820,6 @@ function renderIdentifyDrill(drill, container) {
     const item = drill.items[AppState.drillIndex] || drill.items[0];
     if (!item) return;
 
-    // Create options from all items in this drill
     const options = drill.items.map(i => i.answer);
     const shuffled = [...options].sort(() => Math.random() - 0.5);
 
@@ -496,6 +917,19 @@ function renderQuiz() {
     AppState.quizIndex = 0;
     AppState.quizScore = 0;
     AppState.quizAnswers = new Array(level.quiz.length).fill(null);
+    AppState.quizStartTime = Date.now();
+    AppState.quizElapsed = 0;
+
+    if (AppState.quizTimerInterval) clearInterval(AppState.quizTimerInterval);
+    AppState.quizTimerInterval = setInterval(() => {
+        AppState.quizElapsed = Math.floor((Date.now() - AppState.quizStartTime) / 1000);
+        const timerEl = document.getElementById('quiz-timer');
+        if (timerEl) {
+            timerEl.textContent = `⏱ ${AppState.quizElapsed} dtk`;
+            if (AppState.quizElapsed > 60) timerEl.classList.add('warning');
+            if (AppState.quizElapsed > 120) timerEl.classList.add('danger');
+        }
+    }, 1000);
 
     showQuizQuestion();
 }
@@ -507,23 +941,12 @@ function showQuizQuestion() {
     const content = document.getElementById('content-area');
     content.innerHTML = `
         <div class="quiz-container">
+            <div class="quiz-timer" id="quiz-timer">⏱ 0 dtk</div>
             <div class="quiz-progress" id="quiz-progress"></div>
             <div class="quiz-question-box">
                 <div class="quiz-question">${soal.pertanyaan}</div>
-                ${soal.pertanyaan.includes('ك') || soal.pertanyaan.includes('ب') || soal.pertanyaan.includes('ا') || 
-                  soal.pertanyaan.includes('م') || soal.pertanyaan.includes('ن') || soal.pertanyaan.includes('ص') ||
-                  soal.pertanyaan.includes('ق') || soal.pertanyaan.includes('د') || soal.pertanyaan.includes('ذ') ||
-                  soal.pertanyaan.includes('ر') || soal.pertanyaan.includes('ز') || soal.pertanyaan.includes('س') ||
-                  soal.pertanyaan.includes('ش') || soal.pertanyaan.includes('ط') || soal.pertanyaan.includes('ظ') ||
-                  soal.pertanyaan.includes('ع') || soal.pertanyaan.includes('غ') || soal.pertanyaan.includes('ف') ||
-                  soal.pertanyaan.includes('ل') || soal.pertanyaan.includes('ه') || soal.pertanyaan.includes('و') ||
-                  soal.pertanyaan.includes('ي') || soal.pertanyaan.includes('ح') || soal.pertanyaan.includes('خ') ||
-                  soal.pertanyaan.includes('ج') || soal.pertanyaan.includes('ث') || soal.pertanyaan.includes('ت') ||
-                  soal.pertanyaan.includes('ض') || soal.pertanyaan.includes('ة') || soal.pertanyaan.includes('ء') ||
-                  soal.pertanyaan.includes('َ') || soal.pertanyaan.includes('ِ') || soal.pertanyaan.includes('ُ') ||
-                  soal.pertanyaan.includes('ْ') || soal.pertanyaan.includes('ّ') || soal.pertanyaan.includes('ً') ||
-                  soal.pertanyaan.includes('ٍ') || soal.pertanyaan.includes('ٌ')
-                  ? `<div class="quiz-arab">${extractArabic(soal.pertanyaan)}</div>` : ''}
+                ${soal.pertanyaan.match(/[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF\u064B-\u065F\u0670\u0640]+/g) ? 
+                  `<div class="quiz-arab">${extractArabic(soal.pertanyaan)}</div>` : ''}
             </div>
             <div class="quiz-options" id="quiz-options"></div>
             <div class="quiz-feedback" id="quiz-feedback"></div>
@@ -538,7 +961,7 @@ function showQuizQuestion() {
 }
 
 function extractArabic(text) {
-    const match = text.match(/[؀-ۿݐ-ݿࢠ-ࣿﭐ-﷿ﹰ-﻿ً-ٰٟـ]+/g);
+    const match = text.match(/[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF\u064B-\u065F\u0670\u0640]+/g);
     return match ? match.join(' ') : '';
 }
 
@@ -562,7 +985,7 @@ function renderQuizOptions(soal) {
     const letters = ['A', 'B', 'C', 'D'];
 
     container.innerHTML = soal.pilihan.map((p, i) => `
-        <button class="quiz-option" data-letter="${letters[i]}" onclick="checkQuiz('${p.replace(/'/g, "\'")}', this)">${p}</button>
+        <button class="quiz-option" data-letter="${letters[i]}" onclick="checkQuiz('${p.replace(/'/g, "\\'")}', this)">${p}</button>
     `).join('');
 }
 
@@ -595,6 +1018,7 @@ function nextQuiz() {
     AppState.quizIndex++;
 
     if (AppState.quizIndex >= level.quiz.length) {
+        if (AppState.quizTimerInterval) clearInterval(AppState.quizTimerInterval);
         showQuizResult();
     } else {
         showQuizQuestion();
@@ -605,20 +1029,24 @@ function showQuizResult() {
     const level = AppState.levels.find(l => l.id === AppState.currentLevel);
     const total = level.quiz.length;
     const score = Math.round((AppState.quizScore / total) * 100);
+    const timeSeconds = AppState.quizElapsed;
+    const user = AppState.currentUser;
 
-    // Save progress
-    const prevScore = AppState.progress[`level${AppState.currentLevel}_score`] || 0;
-    if (score > prevScore) {
-        AppState.progress[`level${AppState.currentLevel}_score`] = score;
+    // Save to user
+    if (user) {
+        updateUserScore(user.id, AppState.currentLevel, score, timeSeconds);
     }
 
-    // Unlock next level if score >= 60
-    if (score >= 60 && AppState.currentLevel < 4) {
-        AppState.progress[`level${AppState.currentLevel + 1}_unlocked`] = true;
+    // Determine speed badge
+    let speedClass = 'speed-normal';
+    let speedText = '⚡ Normal';
+    if (timeSeconds < 30) {
+        speedClass = 'speed-fast';
+        speedText = '🚀 Cepat!';
+    } else if (timeSeconds > 90) {
+        speedClass = 'speed-slow';
+        speedText = '🐢 Pelan';
     }
-
-    saveProgress();
-    renderLevels();
 
     let messageClass = 'retry';
     let message = 'Ayo coba lagi! Latih lebih giat ya. 💪';
@@ -633,22 +1061,31 @@ function showQuizResult() {
     const content = document.getElementById('content-area');
     content.innerHTML = `
         <div class="quiz-result">
+            <div style="font-size:3rem;margin-bottom:0.5rem">🏆</div>
             <div class="result-score">${score}%</div>
             <div class="result-label">${AppState.quizScore} benar dari ${total} soal</div>
+            <div style="margin:0.5rem 0">
+                <span class="speed-badge ${speedClass}">${speedText}</span>
+                <span style="color:var(--text-light);font-size:0.9rem;margin-left:0.5rem">⏱ ${timeSeconds} dtk</span>
+            </div>
             <div class="result-message ${messageClass}">${message}</div>
+            ${user ? `<div style="margin-bottom:1rem;color:var(--text-light);font-size:0.9rem">👤 ${user.username}</div>` : ''}
             <div class="result-buttons">
-                <button class="btn btn-primary" onclick="renderQuiz()">Ulangi Kuis</button>
+                <button class="btn btn-primary" onclick="renderQuiz()">🔄 Ulangi Kuis</button>
                 ${score >= 60 && AppState.currentLevel < 4 ? 
                     `<button class="btn btn-primary" onclick="AppState.currentLevel++;AppState.currentTab='materi';renderLevels();showTab('materi')">Level Selanjutnya ➡</button>` : ''}
-                <button class="btn btn-secondary" onclick="showTab('materi')">Kembali ke Materi</button>
+                <button class="btn btn-secondary" onclick="showLeaderboard()">📊 Lihat Ranking</button>
             </div>
         </div>
     `;
+
+    renderLevels();
 }
 
 // ===== INIT =====
 document.addEventListener('DOMContentLoaded', () => {
-    loadProgress();
+    initUsers();
+    initLeaderboard();
     loadXML();
 
     // Setup navigation
@@ -662,6 +1099,15 @@ document.addEventListener('DOMContentLoaded', () => {
     // Close modal on overlay click
     document.getElementById('detail-overlay').addEventListener('click', (e) => {
         if (e.target.id === 'detail-overlay') closeDetail();
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', (e) => {
+        const profile = document.getElementById('user-profile');
+        const dropdown = document.getElementById('user-dropdown');
+        if (profile && dropdown && !profile.contains(e.target)) {
+            dropdown.classList.remove('show');
+        }
     });
 
     // Load voices for TTS
